@@ -4,7 +4,8 @@
 
 <div align="center">
 
-
+<img src="https://github.com/vsiva8483-cpu.png" width="150" height="150" style="border-radius:50%"/>
+</div>
 
 ![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=38BDF8&center=true&vCenter=true&width=500&lines=Java+Backend+Developer;DSA+Enthusiast+%7C+Problem+Solver;300+Days+of+Code+%F0%9F%94%A5;Building+Real-World+Projects)
 
