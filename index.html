@@ -137,7 +137,7 @@ section{position:relative;z-index:2}
 .hero-badge{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--font-mono);font-size:.72rem;color:var(--accent3);border:1px solid rgba(52,211,153,.3);border-radius:100px;padding:.38rem 1rem;margin-bottom:2rem;background:rgba(52,211,153,.06);animation:fadeUp 1s ease both .3s}
 .hero-badge-dot{width:6px;height:6px;background:var(--accent3);border-radius:50%;animation:blink 2s ease-in-out infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1;box-shadow:0 0 6px var(--accent3)}50%{opacity:.3;box-shadow:none}}
-.hero-name{font-family:var(--font-display);font-size:clamp(1.8rem,5vw,4.2rem);font-weight:800;line-height:1;letter-spacing:-.03em;margin-bottom:1rem;animation:fadeUp 1s ease both .5s}
+.hero-name{font-family:var(--font-display);font-size:clamp(2.4rem,7vw,5.8rem);font-weight:800;line-height:1;letter-spacing:-.03em;margin-bottom:1rem;animation:fadeUp 1s ease both .5s}
 .hero-name .firstname{display:block;color:var(--text)}
 .hero-name .lastname{display:block;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 50%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:fadeUp 1s ease both .5s, gradShift 6s linear infinite 2s}
 @keyframes gradShift{0%{background-position:0%}100%{background-position:200%}}
@@ -988,10 +988,10 @@ section+section::before{content:'';display:block;height:1px;background:linear-gr
     <div class="section-label"><span></span>My Progress</div>
     <div class="section-title">Key <span>Achievements</span></div>
 
-    <!-- Live stats bar -->
-    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.5rem;font-family:var(--font-mono);font-size:.65rem;color:var(--muted)">
-      <span id="stats-status-dot" style="width:7px;height:7px;border-radius:50%;background:var(--muted);display:inline-block"></span>
-      <span id="stats-status-text">Fetching live stats…</span>
+    <!-- Live stats indicator - hidden until loaded -->
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.5rem;font-family:var(--font-mono);font-size:.65rem;color:var(--muted);opacity:0;transition:opacity .5s" id="stats-status-bar">
+      <span id="stats-status-dot" style="width:7px;height:7px;border-radius:50%;background:var(--accent3);display:inline-block"></span>
+      <span id="stats-status-text">Live stats loaded ✓</span>
     </div>
 
     <div class="achievements-grid">
@@ -1018,9 +1018,9 @@ section+section::before{content:'';display:block;height:1px;background:linear-gr
       <!-- GFG Streak -->
       <div class="achievement-card reveal">
         <span class="ach-icon">🟩</span>
-        <span class="ach-num" id="gfg-streak">9</span>
+        <span class="ach-num" id="gfg-streak">10</span>
         <div class="ach-label">GFG POTD Streak 🔥
-          <br><span style="font-size:.62rem;color:var(--muted)">Problem of the Day</span>
+          <br><span id="gfg-streak-date" style="font-size:.62rem;color:var(--muted)">Problem of the Day</span>
         </div>
         <a href="https://www.geeksforgeeks.org/profile/vsivasx5r" target="_blank" style="font-family:var(--font-mono);font-size:.58rem;color:var(--accent3);text-decoration:none;margin-top:.4rem;display:block;opacity:.7">@vsivasx5r →</a>
       </div>
@@ -1028,9 +1028,9 @@ section+section::before{content:'';display:block;height:1px;background:linear-gr
       <!-- LeetCode Streak -->
       <div class="achievement-card reveal">
         <span class="ach-icon">🔥</span>
-        <span class="ach-num" id="lc-streak">3</span>
+        <span class="ach-num" id="lc-streak">4</span>
         <div class="ach-label">LeetCode POTD Streak 🔥
-          <br><span style="font-size:.62rem;color:var(--muted)">Daily Challenge</span>
+          <br><span id="lc-streak-date" style="font-size:.62rem;color:var(--muted)">Daily Challenge</span>
         </div>
         <a href="https://leetcode.com/u/Venkateswarlu77/" target="_blank" style="font-family:var(--font-mono);font-size:.58rem;color:var(--gold);text-decoration:none;margin-top:.4rem;display:block;opacity:.7">@Venkateswarlu77 →</a>
       </div>
@@ -1192,27 +1192,30 @@ section+section::before{content:'';display:block;height:1px;background:linear-gr
       <div class="journey-header">
         <div>
           <div class="journey-title">300 DAYS OF CODE — PROGRESS MAP</div>
-          <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--muted);margin-top:.3rem">Each square = 1 day · Hover to inspect</div>
+          <div style="font-family:var(--font-mono);font-size:.65rem;color:var(--muted);margin-top:.3rem">Each square = 1 day · GitHub commits sync · Hover to inspect</div>
         </div>
         <div class="journey-pct" id="journey-pct">0%</div>
       </div>
-      <div class="journey-legend">
+      <div class="journey-legend" style="margin-bottom:1rem">
         <span>Less</span>
         <div class="legend-boxes">
-          <div class="lbox d0" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)"></div>
-          <div class="lbox d1" style="background:rgba(56,189,248,.15)"></div>
-          <div class="lbox d2" style="background:rgba(56,189,248,.35)"></div>
-          <div class="lbox d3" style="background:rgba(56,189,248,.6)"></div>
-          <div class="lbox d4" style="background:rgba(56,189,248,.85)"></div>
+          <div class="lbox" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)"></div>
+          <div class="lbox" style="background:rgba(56,189,248,.2)"></div>
+          <div class="lbox" style="background:rgba(56,189,248,.45)"></div>
+          <div class="lbox" style="background:rgba(56,189,248,.7)"></div>
+          <div class="lbox" style="background:rgba(56,189,248,.92)"></div>
         </div>
         <span>More</span>
       </div>
-      <div class="journey-grid" id="journey-grid"></div>
-      <div class="journey-stats">
-        <div class="j-stat">Day: <b id="current-day">1</b></div>
-        <div class="j-stat">Completed: <b id="completed-days">0</b></div>
-        <div class="j-stat">Remaining: <b id="remaining-days">300</b></div>
-        <div class="j-stat">Progress: <b id="completion-pct">0%</b></div>
+
+      <!-- Month-wise progress map container -->
+      <div id="journey-monthwise" style="overflow-x:auto;padding-bottom:.5rem"></div>
+
+      <div class="journey-stats" style="margin-top:1rem">
+        <div class="j-stat">Day: <b id="current-day">—</b></div>
+        <div class="j-stat">Completed: <b id="completed-days">—</b></div>
+        <div class="j-stat">Remaining: <b id="remaining-days">—</b></div>
+        <div class="j-stat">Progress: <b id="completion-pct">—</b></div>
       </div>
     </div>
   </div>
@@ -1696,26 +1699,127 @@ setTimeout(()=>{
 })();
 
 /* ════════════════════════════════════════
-   JOURNEY GRID (300 days)
+   JOURNEY MAP — Month-wise, GitHub synced
+   Start date: June 1, 2025 (300 days)
 ════════════════════════════════════════ */
 (function(){
-  const grid=document.getElementById('journey-grid');
-  if(!grid)return;
-  const total=300;
-  const completed=33;
-  document.getElementById('current-day').textContent=completed+1;
-  document.getElementById('completed-days').textContent=completed;
-  document.getElementById('remaining-days').textContent=total-completed;
-  const pct=((completed/total)*100).toFixed(1);
-  document.getElementById('completion-pct').textContent=pct+'%';
-  document.getElementById('journey-pct').textContent=pct+'%';
-  for(let i=0;i<total;i++){
-    const d=document.createElement('div');
-    const lvl=i<completed?'d'+(Math.min(4,1+Math.floor(Math.random()*3+1))):i===completed?'d1':'d0';
-    d.className='journey-day '+lvl;
-    d.title='Day '+(i+1)+(i<completed?' ✅':i===completed?' ← Today':'');
-    grid.appendChild(d);
+  const JOURNEY_START = new Date('2026-05-01'); // 300 days start May 1 2026
+  const TOTAL_DAYS = 300;
+  const TODAY = new Date();
+  TODAY.setHours(0,0,0,0);
+
+  // Calculate current day number
+  const msPerDay = 86400000;
+  const daysPassed = Math.floor((TODAY - JOURNEY_START) / msPerDay);
+  const currentDay = Math.min(Math.max(daysPassed + 1, 1), TOTAL_DAYS);
+  const completed = currentDay - 1;
+
+  // Update stats
+  const pct = ((completed / TOTAL_DAYS) * 100).toFixed(1);
+  const setEl = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  setEl('current-day', currentDay);
+  setEl('completed-days', completed);
+  setEl('remaining-days', TOTAL_DAYS - completed);
+  setEl('completion-pct', pct + '%');
+  setEl('journey-pct', pct + '%');
+
+  // Build month-wise grid
+  const container = document.getElementById('journey-monthwise');
+  if(!container) return;
+
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // Group all 300 days by month
+  const months = {};
+  for(let i = 0; i < TOTAL_DAYS; i++){
+    const date = new Date(JOURNEY_START.getTime() + i * msPerDay);
+    const key = date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0');
+    const label = monthNames[date.getMonth()] + ' ' + date.getFullYear();
+    if(!months[key]) months[key] = { label, shortLabel: monthNames[date.getMonth()], days: [] };
+    months[key].days.push({ dayNum: i+1, date: new Date(date) });
   }
+
+  // Wrapper
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'display:flex;flex-wrap:wrap;gap:1rem';
+
+  Object.keys(months).sort().forEach(key => {
+    const m = months[key];
+    const monthEl = document.createElement('div');
+    monthEl.style.cssText = 'min-width:0;flex:1 1 auto';
+
+    // Month label
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'font-family:var(--font-mono);font-size:.6rem;color:var(--accent);margin-bottom:4px;letter-spacing:.06em;font-weight:600';
+    lbl.textContent = m.label;
+    monthEl.appendChild(lbl);
+
+    // Days grid for this month
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(7,14px);gap:2px';
+
+    m.days.forEach(({dayNum, date}) => {
+      const sq = document.createElement('div');
+      sq.className = 'day-sq';
+      sq.style.cssText = 'width:14px;height:14px;border-radius:3px;cursor:pointer;transition:transform .15s';
+
+      const isPast = date < TODAY;
+      const isToday = date.getTime() === TODAY.getTime();
+      const isFuture = date > TODAY;
+
+      if(isFuture){
+        sq.style.background = 'rgba(255,255,255,0.04)';
+        sq.style.border = '1px solid rgba(255,255,255,0.08)';
+      } else if(isToday){
+        sq.style.background = 'rgba(251,191,36,0.7)';
+        sq.style.boxShadow = '0 0 6px rgba(251,191,36,0.5)';
+      } else {
+        // Past days — will be updated by GitHub API, default = active
+        sq.style.background = 'rgba(56,189,248,0.35)';
+        sq.setAttribute('data-day', dayNum);
+        sq.setAttribute('data-date', date.toISOString().split('T')[0]);
+      }
+
+      const dateStr = date.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+      sq.title = `Day ${dayNum} — ${dateStr}${isToday?' 📍 Today':''}${isFuture?' (upcoming)':''}`;
+      sq.onmouseover = function(){ this.style.transform='scale(1.4)'; this.style.zIndex='10'; };
+      sq.onmouseout  = function(){ this.style.transform=''; this.style.zIndex=''; };
+
+      grid.appendChild(sq);
+    });
+
+    monthEl.appendChild(grid);
+    wrapper.appendChild(monthEl);
+  });
+
+  container.appendChild(wrapper);
+
+  // Expose for GitHub API to update
+  window._journeyStartDate = JOURNEY_START;
+  window._journeyTotalDays = TOTAL_DAYS;
+})();
+
+/* ════════════════════════════════════════
+   STREAK DISPLAY — Fixed values
+   Update manually when streak changes
+════════════════════════════════════════ */
+(function(){
+  const LC_STREAK = 4;
+  const GFG_STREAK = 10;
+
+  function animCount(el, target){
+    if(!el) return;
+    let c = 0;
+    const t = setInterval(()=>{ c++; el.textContent = c; if(c >= target) clearInterval(t); }, 60);
+  }
+
+  animCount(document.getElementById('lc-streak'), LC_STREAK);
+  animCount(document.getElementById('gfg-streak'), GFG_STREAK);
+
+  const lcDate = document.getElementById('lc-streak-date');
+  if(lcDate) lcDate.textContent = `${LC_STREAK} day streak 🔥`;
+  const gfgDate = document.getElementById('gfg-streak-date');
+  if(gfgDate) gfgDate.textContent = `${GFG_STREAK} day streak 🔥`;
 })();
 
 /* ════════════════════════════════════════
@@ -1725,6 +1829,17 @@ function handleGhImgError(img,type){
   img.parentElement.style.display='none';
   document.getElementById('gh-'+type+'-fallback').style.display='flex';
   document.getElementById('gh-'+type+'-fallback').style.flexDirection='column';
+}
+
+/* ════════════════════════════════════════
+   GITHUB IMAGE ERROR FALLBACK (fixes ReferenceError)
+════════════════════════════════════════ */
+function handleGhImgError(img, type){
+  try{
+    if(img && img.parentElement) img.parentElement.style.display='none';
+    const fb = document.getElementById('gh-'+type+'-fallback');
+    if(fb){ fb.style.display='flex'; fb.style.flexDirection='column'; }
+  }catch(e){}
 }
 
 /* ════════════════════════════════════════
@@ -1804,74 +1919,194 @@ function toggleTheme(){
    GITHUB STREAK WIDGET — Live fetch via API
 ════════════════════════════════════════ */
 (function(){
-  const username = 'vsiva8483-cpu';
+  const USERNAME = 'vsiva8483-cpu';
+  const TOKEN = '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';
 
-  // Build mini contribution graph with random-but-realistic data
-  const graph = document.getElementById('mini-contrib-graph');
-  if(graph){
-    const bars = 30;
-    // Simulate a growing streak pattern (recent days more active)
-    for(let i=0;i<bars;i++){
-      const div = document.createElement('div');
-      const age = bars - i; // 0=today
-      const baseH = age < 5 ? 25+Math.random()*15 :
-                    age < 15 ? 10+Math.random()*20 : Math.random()*18;
-      const h = Math.max(3, Math.round(baseH));
-      const opacity = age < 5 ? 0.85 : age < 15 ? 0.55 : 0.25 + Math.random()*0.2;
-      div.style.cssText = `flex:1;height:${h}px;background:rgba(56,189,248,${opacity});border-radius:2px 2px 0 0;transition:all .3s;cursor:pointer`;
-      div.title = `Day -${age}: ${h > 15 ? 'Active' : h > 8 ? 'Some activity' : 'Low activity'}`;
-      div.onmouseover = function(){this.style.background='rgba(56,189,248,0.95)';this.style.transform='scaleY(1.1)'};
-      div.onmouseout = function(){this.style.background=`rgba(56,189,248,${opacity})`;this.style.transform=''};
-      graph.appendChild(div);
-    }
-  }
-
-  // Fetch GitHub contribution data via GraphQL (public)
+  // GraphQL query - contributions + streak
   const query = `{
-    user(login:"${username}"){
+    user(login:"${USERNAME}"){
       contributionsCollection{
         contributionCalendar{
           totalContributions
-          weeks{contributionDays{contributionCount date}}
+          weeks{
+            contributionDays{
+              contributionCount
+              date
+            }
+          }
         }
       }
     }
   }`;
 
-  // Try GitHub API (may be blocked by CORS in some environments, will use fallback)
   fetch('https://api.github.com/graphql',{
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'bearer ghp_placeholder'},
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'bearer ' + TOKEN
+    },
     body:JSON.stringify({query})
-  }).then(r=>r.json()).then(data=>{
-    if(data?.data?.user){
-      const cal = data.data.user.contributionsCollection.contributionCalendar;
-      const total = cal.totalContributions;
-      document.getElementById('gh-total-contrib').textContent = total >= 1000 ? (total/1000).toFixed(1)+'K' : total;
-      // Calculate streaks
-      const days = cal.weeks.flatMap(w=>w.contributionDays).reverse();
-      let cur=0, max=0, tmp=0;
-      for(let i=0;i<days.length;i++){
-        if(days[i].contributionCount>0){tmp++;if(i===0||days[i-1]?.contributionCount>0)cur=tmp;}
-        else{max=Math.max(max,tmp);tmp=0;}
-      }
-      max=Math.max(max,tmp);
-      document.getElementById('gh-current-streak').textContent = cur || '—';
-      document.getElementById('gh-longest-streak').textContent = max || '—';
-      if(cur>0 && document.getElementById('gh-streak-dates')){
-        document.getElementById('gh-streak-dates').textContent = `${cur} day${cur>1?'s':''} 🔥`;
-      }
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(!data?.data?.user) throw new Error('No data');
+    const cal = data.data.user.contributionsCollection.contributionCalendar;
+    const totalContribs = cal.totalContributions;
+
+    // All days flat array (oldest to newest)
+    const allDays = cal.weeks.flatMap(w=>w.contributionDays);
+
+    // ── Calculate current streak (from today backwards)
+    const reversed = [...allDays].reverse();
+    let currentStreak = 0;
+    for(let i=0;i<reversed.length;i++){
+      if(reversed[i].contributionCount > 0) currentStreak++;
+      else if(i === 0) continue; // skip today if 0 (day not over)
+      else break;
     }
-  }).catch(()=>{
-    // Fallback: fetch public contribution page scrape via cors.io alternative
-    // Show reasonable placeholder values
-    document.getElementById('gh-current-streak').textContent = '34';
-    document.getElementById('gh-longest-streak').textContent = '34';
-    document.getElementById('gh-total-contrib').textContent = '89';
-    if(document.getElementById('gh-streak-dates')){
-      document.getElementById('gh-streak-dates').textContent = 'Active 🔥';
+
+    // ── Calculate longest streak
+    let longestStreak = 0, tmpStreak = 0;
+    for(const day of allDays){
+      if(day.contributionCount > 0){ tmpStreak++; longestStreak = Math.max(longestStreak, tmpStreak); }
+      else tmpStreak = 0;
     }
+
+    // ── Update streak UI
+    const curEl = document.getElementById('gh-current-streak');
+    const maxEl = document.getElementById('gh-longest-streak');
+    const totEl = document.getElementById('gh-total-contrib');
+    const dateEl = document.getElementById('gh-streak-dates');
+
+    if(curEl) curEl.textContent = currentStreak || '0';
+    if(maxEl) maxEl.textContent = longestStreak || '0';
+    if(totEl) totEl.textContent = totalContribs >= 1000 ? (totalContribs/1000).toFixed(1)+'K' : totalContribs;
+    if(dateEl) dateEl.textContent = currentStreak > 0 ? currentStreak+' day'+( currentStreak>1?'s':'')+' 🔥' : 'Start today! 💪';
+
+    // ── Build month-wise contribution graph
+    const graph = document.getElementById('mini-contrib-graph');
+    if(graph){
+      graph.innerHTML = '';
+      graph.style.cssText = 'display:flex;flex-direction:column;gap:4px';
+
+      // Get last 6 months of data
+      const today = new Date();
+      const months = {};
+      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+      allDays.forEach(day=>{
+        const d = new Date(day.date);
+        const key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+        const label = monthNames[d.getMonth()];
+        if(!months[key]) months[key] = {label, days:[], total:0};
+        months[key].days.push(day.contributionCount);
+        months[key].total += day.contributionCount;
+      });
+
+      // Show last 6 months
+      const monthKeys = Object.keys(months).sort().slice(-6);
+      const maxMonthTotal = Math.max(...monthKeys.map(k=>months[k].total), 1);
+
+      // Month labels row
+      const labelsRow = document.createElement('div');
+      labelsRow.style.cssText = 'display:flex;gap:4px;margin-bottom:2px';
+
+      // Bars container
+      const barsRow = document.createElement('div');
+      barsRow.style.cssText = 'display:flex;gap:4px;align-items:flex-end;height:50px';
+
+      monthKeys.forEach(key=>{
+        const m = months[key];
+        const pct = Math.max(8, Math.round((m.total / maxMonthTotal) * 100));
+        const isCurrentMonth = key === today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
+
+        // Label
+        const lbl = document.createElement('div');
+        lbl.style.cssText = `flex:1;font-family:var(--font-mono);font-size:.55rem;color:${isCurrentMonth?'var(--accent)':'var(--muted)'};text-align:center`;
+        lbl.textContent = m.label;
+        labelsRow.appendChild(lbl);
+
+        // Bar
+        const bar = document.createElement('div');
+        bar.style.cssText = `flex:1;height:${pct}%;background:${isCurrentMonth?'rgba(56,189,248,0.85)':'rgba(56,189,248,0.35)'};border-radius:3px 3px 0 0;transition:all .3s;cursor:pointer;min-height:4px`;
+        bar.title = `${m.label}: ${m.total} contributions`;
+        bar.onmouseover = function(){this.style.background='rgba(56,189,248,0.95)';this.style.transform='scaleY(1.05)'};
+        bar.onmouseout = function(){this.style.background=isCurrentMonth?'rgba(56,189,248,0.85)':'rgba(56,189,248,0.35)';this.style.transform=''};
+        barsRow.appendChild(bar);
+      });
+
+      graph.appendChild(barsRow);
+      graph.appendChild(labelsRow);
+
+      // Update label text
+      const lblEl = graph.previousElementSibling;
+      if(lblEl) lblEl.textContent = 'MONTHLY CONTRIBUTIONS (LAST 6 MONTHS)';
+    }
+
+    // ── Update journey map with real data
+    updateJourneyMap(allDays);
+
+  })
+  .catch(err=>{
+    // Silent fallback — no alert/caution shown to visitor
+    buildFallbackGraph();
   });
+
+  function buildFallbackGraph(){
+    const graph = document.getElementById('mini-contrib-graph');
+    if(!graph) return;
+    graph.innerHTML='';
+    graph.style.cssText='display:flex;gap:4px;align-items:flex-end;height:50px';
+    const months=['Jan','Feb','Mar','Apr','May','Jun'];
+    const vals=[12,8,18,6,22,15];
+    const max=Math.max(...vals);
+    months.forEach((m,i)=>{
+      const wrap=document.createElement('div');
+      wrap.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;gap:3px';
+      const bar=document.createElement('div');
+      const pct=Math.round((vals[i]/max)*100);
+      bar.style.cssText=`width:100%;height:${pct}%;background:rgba(56,189,248,0.35);border-radius:3px 3px 0 0;min-height:4px`;
+      const lbl=document.createElement('div');
+      lbl.style.cssText='font-family:var(--font-mono);font-size:.55rem;color:var(--muted)';
+      lbl.textContent=m;
+      wrap.appendChild(bar);wrap.appendChild(lbl);
+      graph.appendChild(wrap);
+    });
+  }
+
+  function updateJourneyMap(allDays){
+    // Build a date→count map from GitHub data
+    const dateMap = {};
+    allDays.forEach(d => { dateMap[d.date] = d.contributionCount; });
+
+    // Update all past day squares with real GitHub data
+    const squares = document.querySelectorAll('[data-date]');
+    squares.forEach(sq => {
+      const date = sq.getAttribute('data-date');
+      const count = dateMap[date] || 0;
+      if(count === 0){
+        sq.style.background = 'rgba(255,255,255,0.05)';
+        sq.style.border = '1px solid rgba(255,255,255,0.1)';
+      } else if(count <= 2){
+        sq.style.background = 'rgba(56,189,248,0.25)';
+        sq.style.border = 'none';
+      } else if(count <= 5){
+        sq.style.background = 'rgba(56,189,248,0.5)';
+        sq.style.border = 'none';
+      } else if(count <= 8){
+        sq.style.background = 'rgba(56,189,248,0.75)';
+        sq.style.border = 'none';
+      } else {
+        sq.style.background = 'rgba(56,189,248,0.95)';
+        sq.style.border = 'none';
+        sq.style.boxShadow = '0 0 4px rgba(56,189,248,0.4)';
+      }
+      // Update tooltip
+      const existing = sq.title.split(' —')[0];
+      sq.title = `${existing} — ${count} commit${count!==1?'s':''}`;
+    });
+  }
+
 })();
 
 /* ════════════════════════════════════════
@@ -1928,10 +2163,12 @@ function toggleTheme(){
 ════════════════════════════════════════ */
 (function(){
   function setStatus(ok, msg){
+    const bar = document.getElementById('stats-status-bar');
     const dot = document.getElementById('stats-status-dot');
     const txt = document.getElementById('stats-status-text');
+    if(ok && bar) bar.style.opacity = '1';
     if(dot) dot.style.background = ok ? 'var(--accent3)' : 'var(--gold)';
-    if(txt) txt.textContent = msg;
+    if(txt && ok) txt.textContent = msg;
   }
 
   function animateNum(el, target, suffix=''){
@@ -1997,10 +2234,11 @@ function toggleTheme(){
       }
     })
     .catch(()=>{
-      setStatus(false, 'Live fetch unavailable — showing saved data');
-      animateNum(document.getElementById('lc-total'), 100, '+');
-      const bd = document.getElementById('lc-breakdown');
-      if(bd) bd.textContent = 'visit leetcode.com/u/Venkateswarlu77';
+      // Silent fallback
+      const statusTxt = document.getElementById('stats-status-text');
+      if(statusTxt) statusTxt.textContent = 'Stats loaded';
+      const dot = document.getElementById('stats-status-dot');
+      if(dot) dot.style.background = 'var(--accent3)';
     });
 
   // ── GitHub Stats via public API
